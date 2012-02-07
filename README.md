@@ -12,7 +12,12 @@ This is an [EditorConfig][] plugin for [Geany][].
         apt-get install libgtk2.0-dev intltool geany
 
 2.  Download EditorConfig plugin for Geany source tree, and you will find a
-    `Makefile` in the root. Execute `make` to compile this plugin.
+    `Makefile` in the root. Execute `make` to compile this plugin. Note that if
+    the prefix of EditorConfig on your system is not `/usr/local`, you need to
+    specify the `EDITORCONFIG_PREFIX` when executing make. For example, your
+    EditorConfig prefix is `/usr`, then you should execute:
+
+        make EDITORCONFIG_PREFIX=/usr
 
 3.  Once the compilation succeeds, there will be an `editorconfig-geany.so` in
     the root of the source tree. Copy this file to `${geany_prefix}/lib/geany`.
