@@ -30,7 +30,7 @@ EDITORCONFIG_PREFIX = /usr/local
 CC = gcc
 CFLAGS = -Wall -Wextra -O2 -g -fPIC `pkg-config --cflags geany` -I{EDITORCONFIG_PREFIX}/editorconfig
 LDFLAGS = -shared `pkg-config --libs geany` -L ${EDITORCONFIG_PREFIX}/lib -leditorconfig
-RM = rm
+RM = rm -f
 TARGET_LIB = editorconfig-geany.so
 
 SRCS = editorconfig-geany.c
@@ -49,5 +49,5 @@ include $(SRCS:.c=.d)
 
 .PHONY: clean
 clean:
-	-${RM} -f ${TARGET_LIB} ${OBJS} $(SRCS:.c=.d)
+	-${RM} ${TARGET_LIB} ${OBJS} $(SRCS:.c=.d)
 
