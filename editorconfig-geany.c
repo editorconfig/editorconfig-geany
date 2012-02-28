@@ -62,6 +62,7 @@ load_editorconfig(const GeanyDocument* gd)
     struct
     {
         const char*     indent_style;
+#define INDENT_SIZE_TAB (-1000) /* indent_size = -1000 means indent_size = tab*/
         int             indent_size;
         int             tab_width;
         const char*     end_of_line;
@@ -99,8 +100,14 @@ load_editorconfig(const GeanyDocument* gd)
             ecConf.indent_style = value;
         else if (!strcmp(name, "tab_width"))
             ecConf.tab_width = atoi(value);
-        else if (!strcmp(name, "indent_size"))
-            ecConf.indent_size = atoi(value);
+        else if (!strcmp(name, "indent_size")) {
+            int     value_i = atoi(value);
+
+            if (!strcmp(value, "tab"))
+                ecConf.indent_size = INDENT_SIZE_TAB;
+            else if (value_i > 0)
+                ecConf.indent_size = value_i;
+        }
         else if (!strcmp(name, "end_of_line"))
             ecConf.end_of_line = value;
     }
@@ -126,6 +133,13 @@ load_editorconfig(const GeanyDocument* gd)
     if (ecConf.tab_width > 0)
         scintilla_send_message(sci, SCI_SETTABWIDTH,
                 (uptr_t)ecConf.tab_width, 0);
+
+    if (ecConf.indent_size == INDENT_SIZE_TAB) {
+        int cur_tabwidth = scintilla_send_message(sci, SCI_GETTABWIDTH, 0, 0);
+
+        /* set indent_size to tab_width here */ 
+        scintilla_send_message(sci, SCI_SETINDENT, (uptr_t)cur_tabwidth, 0);
+    }
 
     /* set eol */
     if (ecConf.end_of_line) {
