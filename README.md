@@ -38,6 +38,6 @@ The EditorConfig Geany plugin supports the following EditorConfig
 * root (only used by EditorConfig core)
 
 [EditorConfig]: http://editorconfig.org
-[EditorConfig core]: https://github.com/editorconfig/editorconfig
+[EditorConfig core]: https://github.com/editorconfig/editorconfig-core
 [properties]: http://editorconfig.org/#supported-properties
 [Geany]: http://www.geany.org
