@@ -4,6 +4,8 @@ This is an [EditorConfig][] plugin for [Geany][].
 
 ## Installation
 
+### Install From source
+
 1.  Download the [EditorConfig core][] and follow the instructions in the
     README and INSTALL files to install it. You also need to intall geany and
     GTK 2.0 development files. This could be done by executing the following
@@ -26,7 +28,20 @@ This is an [EditorConfig][] plugin for [Geany][].
     item. In the Plugin Manager Dialog, check the plugin named `EditorConfig`.
     Click on the `OK` button. Now you are ready to use this plugin.
 
-## Supported properties
+
+### Install From Binary
+
+1.  Install [EditorConfig core][] library. This can be either done by building
+    it from source or install the binary directly.
+
+2.  [Download the Geany plugin binary][Geany Plugin Binary Download] file and
+    copy this file to `${geany_prefix}/lib/geany`.
+
+3.  Run Geany, click on the `Tools` menu, and choose the `Plugin Manager` menu
+    item. In the Plugin Manager Dialog, check the plugin named `EditorConfig`.
+    Click on the `OK` button. Now you are ready to use this plugin.
+
+## Supported Properties
 
 The EditorConfig Geany plugin supports the following EditorConfig
 [properties][]:
@@ -41,3 +56,4 @@ The EditorConfig Geany plugin supports the following EditorConfig
 [EditorConfig core]: https://github.com/editorconfig/editorconfig-core
 [properties]: http://editorconfig.org/#supported-properties
 [Geany]: http://www.geany.org
+[Geany Plugin Binary Download]: https://github.com/editorconfig/editorconfig-geany/downloads
