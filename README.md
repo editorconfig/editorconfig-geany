@@ -23,6 +23,10 @@ This is an [EditorConfig][] plugin for [Geany][].
 
 3.  Once the compilation succeeds, there will be an `editorconfig-geany.so` in
     the root of the source tree. Copy this file to `${geany_prefix}/lib/geany`.
+    But sometimes the path may be a little bit tricky on some systems. For
+    these cases, the path can usually be obtained by
+    `echo $(pkg-config --variable=libdir geany)/geany` if `pkg-config` is
+    present in your system.
 
 4.  Run Geany, click on the `Tools` menu, and choose the `Plugin Manager` menu
     item. In the Plugin Manager Dialog, check the plugin named `EditorConfig`.
