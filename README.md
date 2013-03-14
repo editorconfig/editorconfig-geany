@@ -56,4 +56,4 @@ The EditorConfig Geany plugin supports the following EditorConfig
 [EditorConfig core]: https://github.com/editorconfig/editorconfig-core
 [properties]: http://editorconfig.org/#supported-properties
 [Geany]: http://www.geany.org
-[Geany Plugin Binary Download]: https://github.com/editorconfig/editorconfig-geany/downloads
+[Geany Plugin Binary Download]: https://sourceforge.net/projects/editorconfig/files/EditorConfig-Geany-Plugin/
