@@ -21,7 +21,7 @@
 EDITORCONFIG_PREFIX = /usr/local
 
 CC = cc
-CFLAGS = -Wall -Wextra -O2 -g -fPIC `pkg-config --cflags geany` -I${EDITORCONFIG_PREFIX}/editorconfig
+CFLAGS = -Wall -Wextra -O2 -g -fPIC `pkg-config --cflags geany` -I${EDITORCONFIG_PREFIX}/include
 LDFLAGS = -shared `pkg-config --libs geany` -L ${EDITORCONFIG_PREFIX}/lib -leditorconfig
 RM = rm -f
 TARGET_LIB = editorconfig-geany.so
