@@ -33,7 +33,7 @@ OBJS = $(SRCS:.c=.o)
 all: ${TARGET_LIB}
 
 $(TARGET_LIB): $(OBJS)
-	$(CC) ${LDFLAGS} -o $@ $^
+	$(CC) -o $@ $^ ${LDFLAGS}
 
 $(SRCS:.c=.d):%.d:%.c
 	$(CC) $(CFLAGS) -MM $< >$@
