@@ -71,7 +71,7 @@ load_editorconfig(const GeanyDocument* gd)
     memset(&ecConf, 0, sizeof(ecConf));
 
     /* start parsing */
-    if ((err_num = editorconfig_parse(gd->file_name, eh)) != 0 &&
+    if ((err_num = editorconfig_parse(DOC_FILENAME(gd), eh)) != 0 &&
             /* Ignore full path error, whose error code is
              * EDITORCONFIG_PARSE_NOT_FULL_PATH */
             err_num != EDITORCONFIG_PARSE_NOT_FULL_PATH) {
