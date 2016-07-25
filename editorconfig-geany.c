@@ -108,13 +108,12 @@ load_editorconfig(const GeanyDocument* gd)
 
     if (ecConf.indent_style) {
         if (!strcmp(ecConf.indent_style, "tab"))
-            scintilla_send_message(sci, SCI_SETUSETABS, (uptr_t)1, 0);
+            editor_set_indent_type(gd->editor, GEANY_INDENT_TYPE_TABS);
         else if (!strcmp(ecConf.indent_style, "space"))
-            scintilla_send_message(sci, SCI_SETUSETABS, (uptr_t)0, 0);
+            editor_set_indent_type(gd->editor, GEANY_INDENT_TYPE_SPACES);
     }
     if (ecConf.indent_size > 0) {
-        scintilla_send_message(sci, SCI_SETINDENT,
-                (uptr_t)ecConf.indent_size, 0);
+        editor_set_indent_width(gd->editor, ecConf.indent_size);
 
         /*
          * We set the tab width here, so that this could be overrided then
