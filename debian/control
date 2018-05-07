@@ -1,0 +1,15 @@
+Source: editorconfig-geany
+Section: devel
+Priority: optional
+Maintainer: Andreas Wirooks <andreas.wirooks@1und1.de>
+Build-Depends: debhelper (>= 9), pkg-config, libgtk-3-dev, libeditorconfig-dev, geany, geany-common
+Standards-Version: 3.9.5
+Homepage: https://github.com/editorconfig/editorconfig-geany
+Vcs-Git: git@github.com:editorconfig/editorconfig-geany.git
+Vcs-Browser: https://github.com/editorconfig/editorconfig-geany
+
+Package: editorconfig-geany
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: EditorConfig support for Geany
+ EditorConfig support for Geany.

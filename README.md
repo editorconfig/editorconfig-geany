@@ -36,6 +36,23 @@ This is an [EditorConfig][] plugin for [Geany][].
     Click on the `OK` button. Now you are ready to use this plugin.
 
 
+### Build Debian/Ubuntu/etc. package from source
+
+1.  Requirements for building the package are a GTK3 Version of Geany >= 1.32.
+    This should work on all Debian like operating systems that meet the
+    requirements in the control file. Further you require `build-essential`
+    and `fakeroot` or `pbuilder` depending on how to build the package.
+
+2.  Build with dpkg-buildpackage:
+    Run `dpkg-buildpackage -rfakeroot -uc -us` to build inside sources.
+    Alternatively build with pbuilder:
+    Run `dpkg-source -b DIRECTORYNAME` on the directory where the source tree
+    root resides. This builds the source package, especially the dsc file.
+    Run `sudo pbuilder --build editorconfig-geany_1.dsc` to build. The
+    resulting package lies in /var/cache/pbuilder/result .
+
+3.  Install resulting debian package(s) with `dpkg` or `gdebi`.
+
 ### Install From Binary
 
 There is no prebuilt binary package currently.

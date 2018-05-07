@@ -18,7 +18,10 @@
 
 # Makefile for editorconfig-geany
 
-EDITORCONFIG_PREFIX = /usr/local
+ifndef EDITORCONFIG_PREFIX
+	EDITORCONFIG_PREFIX = /usr/local
+endif
+TARGET_ARCHITECTURE= $(shell cc -dumpmachine)
 
 CC = cc
 CFLAGS = -Wall -Wextra -O2 -g -fPIC `pkg-config --cflags geany` -I${EDITORCONFIG_PREFIX}/include
@@ -44,3 +47,7 @@ include $(SRCS:.c=.d)
 clean:
 	-${RM} ${TARGET_LIB} ${OBJS} $(SRCS:.c=.d)
 
+.PHONY: install
+install: all
+	install -d $(DESTDIR)$(prefix)/usr/lib/$(TARGET_ARCHITECTURE)/geany
+	install $(TARGET_LIB) $(DESTDIR)$(prefix)/usr/lib/$(TARGET_ARCHITECTURE)/geany/$(TARGET_LIB)
