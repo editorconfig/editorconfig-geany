@@ -11,10 +11,10 @@ This is an [EditorConfig][] plugin for [Geany][].
 
         apt-get install libeditorconfig-dev
 
-    You also need to install geany and GTK 2.0 development files. This could be
+    You also need to install geany and GTK development files (GTK2 or GTK3 depending on your system). This could be
     done by executing the following command if you are using Debian/Ubuntu:
 
-        apt-get install libgtk2.0-dev intltool geany
+        apt-get install libgtk2.0-dev libgtk-3-dev intltool geany
 
 2.  Download EditorConfig plugin for Geany source tree, and you will find a
     `Makefile` in the root. Execute `make` to compile this plugin. Note that if
