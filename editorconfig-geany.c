@@ -50,36 +50,21 @@ PluginCallback plugin_callbacks[] =
     { NULL, NULL, FALSE, NULL }
 };
 
-    static int
-load_editorconfig(const GeanyDocument* gd)
+struct editor_config {
+    const char*     indent_style;
+    #define INDENT_SIZE_TAB (-1000) /* indent_size = -1000 means indent_size = tab*/
+    int             indent_size;
+    int             tab_width;
+    const char*     end_of_line;
+}; /* obtained EditorConfig settings will be here */
+
+    static struct editor_config
+parse_editorconfig(editorconfig_handle *eh)
 {
-    struct
-    {
-        const char*     indent_style;
-#define INDENT_SIZE_TAB (-1000) /* indent_size = -1000 means indent_size = tab*/
-        int             indent_size;
-        int             tab_width;
-        const char*     end_of_line;
-    } ecConf; /* obtained EditorConfig settings will be here */
-
+    struct editor_config    ecConf;
     int                     i;
-    editorconfig_handle     eh = editorconfig_handle_init();
-    int                     err_num;
     int                     name_value_count;
-    ScintillaObject*        sci = gd->editor->sci;
-
     memset(&ecConf, 0, sizeof(ecConf));
-
-    /* start parsing */
-    if ((err_num = editorconfig_parse(DOC_FILENAME(gd), eh)) != 0 &&
-            /* Ignore full path error, whose error code is
-             * EDITORCONFIG_PARSE_NOT_FULL_PATH */
-            err_num != EDITORCONFIG_PARSE_NOT_FULL_PATH) {
-        editorconfig_handle_destroy(eh);
-        return err_num;
-    }
-
-    /* apply the settings */
 
     name_value_count = editorconfig_handle_get_name_value_count(eh);
 
@@ -105,7 +90,29 @@ load_editorconfig(const GeanyDocument* gd)
         else if (!strcmp(name, "end_of_line"))
             ecConf.end_of_line = value;
     }
+    return ecConf;
+}
 
+    static int
+load_editorconfig(const GeanyDocument* gd)
+{
+    struct editor_config    ecConf;
+    editorconfig_handle     eh = editorconfig_handle_init();
+    int                     err_num;
+    ScintillaObject*        sci = gd->editor->sci;
+
+    /* start parsing */
+    if ((err_num = editorconfig_parse(DOC_FILENAME(gd), eh)) != 0 &&
+            /* Ignore full path error, whose error code is
+             * EDITORCONFIG_PARSE_NOT_FULL_PATH */
+            err_num != EDITORCONFIG_PARSE_NOT_FULL_PATH) {
+        editorconfig_handle_destroy(eh);
+        return err_num;
+    }
+
+    ecConf = parse_editorconfig(eh);
+
+    /* apply the settings */
     if (ecConf.indent_style) {
         if (!strcmp(ecConf.indent_style, "tab"))
             editor_set_indent_type(gd->editor, GEANY_INDENT_TYPE_TABS);
