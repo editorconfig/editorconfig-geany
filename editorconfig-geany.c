@@ -39,12 +39,16 @@ static GtkWidget*  menu_item_reload_editorconfig;
 on_document_open(GObject* obj, GeanyDocument* gd, gpointer user_data);
 
     static void
+on_document_save(GObject* obj, GeanyDocument* gd, gpointer user_data);
+
+    static void
 on_geany_startup_complete(GObject* obj, gpointer user_data);
 
 /* plugin signals */
 PluginCallback plugin_callbacks[] =
 {
     { "document-open", (GCallback)&on_document_open, TRUE, NULL },
+    { "document-before-save", (GCallback)&on_document_save, TRUE, NULL },
     { "geany-startup-complete",
         (GCallback)&on_geany_startup_complete, TRUE, NULL },
     { NULL, NULL, FALSE, NULL }
@@ -56,6 +60,7 @@ struct editor_config {
     int             indent_size;
     int             tab_width;
     const char*     end_of_line;
+    int             insert_final_newline;
 }; /* obtained EditorConfig settings will be here */
 
     static struct editor_config
@@ -89,6 +94,8 @@ parse_editorconfig(editorconfig_handle *eh)
         }
         else if (!strcmp(name, "end_of_line"))
             ecConf.end_of_line = value;
+        else if (!strcmp(name, "insert_final_newline") && !strcmp(value, "true"))
+            ecConf.insert_final_newline = 1;
     }
     return ecConf;
 }
@@ -188,6 +195,38 @@ on_document_open(GObject* obj, GeanyDocument* gd, gpointer user_data)
     if ((err_num = load_editorconfig(gd)) != 0) {
         dialogs_show_msgbox(GTK_MESSAGE_ERROR,
                 "Failed to reload EditorConfig.");
+    }
+}
+
+    static void
+on_document_save(GObject* obj, GeanyDocument* gd, gpointer user_data)
+{
+    if (!gd) {
+        return;
+    }
+
+    struct editor_config    ecConf;
+    editorconfig_handle     eh = editorconfig_handle_init();
+    GeanyEditor*            editor = gd->editor;
+
+    if (editorconfig_parse(DOC_FILENAME(gd), eh) != 0) {
+        return;
+    }
+    ecConf = parse_editorconfig(eh);
+
+    if (ecConf.insert_final_newline) {
+        gint max_lines = sci_get_line_count(editor->sci);
+        gboolean append_newline = (max_lines == 1);
+        gint end_document = sci_get_position_from_line(
+            editor->sci, max_lines);
+        if (max_lines > 1) {
+            append_newline = end_document > sci_get_position_from_line(
+                editor->sci, max_lines - 1);
+        }
+        if (append_newline) {
+            const gchar *eol = editor_get_eol_char(editor);
+            sci_insert_text(editor->sci, end_document, eol);
+        }
     }
 }
 
