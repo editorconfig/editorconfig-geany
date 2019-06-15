@@ -66,6 +66,7 @@ The EditorConfig Geany plugin supports the following EditorConfig
 * indent_size
 * tab_width
 * end_of_line
+* insert_final_newline
 * root (only used by EditorConfig core)
 
 [EditorConfig]: http://editorconfig.org
