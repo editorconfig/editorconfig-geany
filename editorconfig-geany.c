@@ -54,7 +54,7 @@ PluginCallback plugin_callbacks[] =
     { NULL, NULL, FALSE, NULL }
 };
 
-struct editor_config {
+struct editorconfig {
     const char*     indent_style;
     #define INDENT_SIZE_TAB (-1000) /* indent_size = -1000 means indent_size = tab*/
     int             indent_size;
@@ -63,13 +63,12 @@ struct editor_config {
     int             insert_final_newline;
 }; /* obtained EditorConfig settings will be here */
 
-    static struct editor_config
-parse_editorconfig(editorconfig_handle *eh)
+    static void
+parse_editorconfig(editorconfig_handle* eh, struct editorconfig* ecConf)
 {
-    struct editor_config    ecConf;
     int                     i;
     int                     name_value_count;
-    memset(&ecConf, 0, sizeof(ecConf));
+    memset(ecConf, 0, sizeof(*ecConf));
 
     name_value_count = editorconfig_handle_get_name_value_count(eh);
 
@@ -81,29 +80,28 @@ parse_editorconfig(editorconfig_handle *eh)
         editorconfig_handle_get_name_value(eh, i, &name, &value);
 
         if (!strcmp(name, "indent_style"))
-            ecConf.indent_style = value;
+            ecConf->indent_style = value;
         else if (!strcmp(name, "tab_width"))
-            ecConf.tab_width = atoi(value);
+            ecConf->tab_width = atoi(value);
         else if (!strcmp(name, "indent_size")) {
             int     value_i = atoi(value);
 
             if (!strcmp(value, "tab"))
-                ecConf.indent_size = INDENT_SIZE_TAB;
+                ecConf->indent_size = INDENT_SIZE_TAB;
             else if (value_i > 0)
-                ecConf.indent_size = value_i;
+                ecConf->indent_size = value_i;
         }
         else if (!strcmp(name, "end_of_line"))
-            ecConf.end_of_line = value;
+            ecConf->end_of_line = value;
         else if (!strcmp(name, "insert_final_newline") && !strcmp(value, "true"))
-            ecConf.insert_final_newline = 1;
+            ecConf->insert_final_newline = 1;
     }
-    return ecConf;
 }
 
     static int
 load_editorconfig(const GeanyDocument* gd)
 {
-    struct editor_config    ecConf;
+    struct editorconfig     ecConf;
     editorconfig_handle     eh = editorconfig_handle_init();
     int                     err_num;
     ScintillaObject*        sci = gd->editor->sci;
@@ -117,7 +115,7 @@ load_editorconfig(const GeanyDocument* gd)
         return err_num;
     }
 
-    ecConf = parse_editorconfig(eh);
+    parse_editorconfig(eh, &ecConf);
 
     /* apply the settings */
     if (ecConf.indent_style) {
@@ -205,14 +203,14 @@ on_document_save(GObject* obj, GeanyDocument* gd, gpointer user_data)
         return;
     }
 
-    struct editor_config    ecConf;
+    struct editorconfig     ecConf;
     editorconfig_handle     eh = editorconfig_handle_init();
     GeanyEditor*            editor = gd->editor;
 
     if (editorconfig_parse(DOC_FILENAME(gd), eh) != 0) {
         return;
     }
-    ecConf = parse_editorconfig(eh);
+    parse_editorconfig(eh, &ecConf);
 
     if (ecConf.insert_final_newline) {
         gint max_lines = sci_get_line_count(editor->sci);
