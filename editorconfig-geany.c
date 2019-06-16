@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2011-2012 EditorConfig Team
+  Copyright (c) 2011-2019 EditorConfig Team
   All rights reserved.
 
   This file is part of EditorConfig-geany.
@@ -26,13 +26,13 @@
 PLUGIN_VERSION_CHECK(211)
 
 PLUGIN_SET_INFO("EditorConfig", "EditorConfig Plugin for Geany",
-        "0.1", "http://editorconfig.org");
+        "0.2", "http://editorconfig.org");
 
 GeanyPlugin*         geany_plugin;
 GeanyData*           geany_data;
 GeanyFunctions*      geany_functions;
 
-/* Reload EditorConfig menu item */ 
+/* Reload EditorConfig menu item */
 static GtkWidget*  menu_item_reload_editorconfig;
 
     static void
