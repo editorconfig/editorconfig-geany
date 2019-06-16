@@ -64,11 +64,11 @@ struct editorconfig {
 }; /* obtained EditorConfig settings will be here */
 
     static void
-parse_editorconfig(editorconfig_handle* eh, struct editorconfig* ecConf)
+parse_editorconfig(editorconfig_handle* eh, struct editorconfig* ec)
 {
     int                     i;
     int                     name_value_count;
-    memset(ecConf, 0, sizeof(*ecConf));
+    memset(ec, 0, sizeof(*ec));
 
     name_value_count = editorconfig_handle_get_name_value_count(eh);
 
@@ -80,28 +80,28 @@ parse_editorconfig(editorconfig_handle* eh, struct editorconfig* ecConf)
         editorconfig_handle_get_name_value(eh, i, &name, &value);
 
         if (!strcmp(name, "indent_style"))
-            ecConf->indent_style = value;
+            ec->indent_style = value;
         else if (!strcmp(name, "tab_width"))
-            ecConf->tab_width = atoi(value);
+            ec->tab_width = atoi(value);
         else if (!strcmp(name, "indent_size")) {
             int     value_i = atoi(value);
 
             if (!strcmp(value, "tab"))
-                ecConf->indent_size = INDENT_SIZE_TAB;
+                ec->indent_size = INDENT_SIZE_TAB;
             else if (value_i > 0)
-                ecConf->indent_size = value_i;
+                ec->indent_size = value_i;
         }
         else if (!strcmp(name, "end_of_line"))
-            ecConf->end_of_line = value;
+            ec->end_of_line = value;
         else if (!strcmp(name, "insert_final_newline") && !strcmp(value, "true"))
-            ecConf->insert_final_newline = 1;
+            ec->insert_final_newline = 1;
     }
 }
 
     static int
 load_editorconfig(const GeanyDocument* gd)
 {
-    struct editorconfig     ecConf;
+    struct editorconfig     ec;
     editorconfig_handle     eh = editorconfig_handle_init();
     int                     err_num;
     ScintillaObject*        sci = gd->editor->sci;
@@ -115,31 +115,31 @@ load_editorconfig(const GeanyDocument* gd)
         return err_num;
     }
 
-    parse_editorconfig(eh, &ecConf);
+    parse_editorconfig(eh, &ec);
 
     /* apply the settings */
-    if (ecConf.indent_style) {
-        if (!strcmp(ecConf.indent_style, "tab"))
+    if (ec.indent_style) {
+        if (!strcmp(ec.indent_style, "tab"))
             editor_set_indent_type(gd->editor, GEANY_INDENT_TYPE_TABS);
-        else if (!strcmp(ecConf.indent_style, "space"))
+        else if (!strcmp(ec.indent_style, "space"))
             editor_set_indent_type(gd->editor, GEANY_INDENT_TYPE_SPACES);
     }
-    if (ecConf.indent_size > 0) {
-        editor_set_indent_width(gd->editor, ecConf.indent_size);
+    if (ec.indent_size > 0) {
+        editor_set_indent_width(gd->editor, ec.indent_size);
 
         /*
          * We set the tab width here, so that this could be overrided then
-         * if ecConf.tab_wdith > 0
+         * if ec.tab_wdith > 0
          */
         scintilla_send_message(sci, SCI_SETTABWIDTH,
-                (uptr_t)ecConf.indent_size, 0);
+                (uptr_t)ec.indent_size, 0);
     }
 
-    if (ecConf.tab_width > 0)
+    if (ec.tab_width > 0)
         scintilla_send_message(sci, SCI_SETTABWIDTH,
-                (uptr_t)ecConf.tab_width, 0);
+                (uptr_t)ec.tab_width, 0);
 
-    if (ecConf.indent_size == INDENT_SIZE_TAB) {
+    if (ec.indent_size == INDENT_SIZE_TAB) {
         int cur_tabwidth = scintilla_send_message(sci, SCI_GETTABWIDTH, 0, 0);
 
         /* set indent_size to tab_width here */ 
@@ -147,12 +147,12 @@ load_editorconfig(const GeanyDocument* gd)
     }
 
     /* set eol */
-    if (ecConf.end_of_line) {
-        if (!strcmp(ecConf.end_of_line, "lf"))
+    if (ec.end_of_line) {
+        if (!strcmp(ec.end_of_line, "lf"))
             scintilla_send_message(sci, SCI_SETEOLMODE, (uptr_t)SC_EOL_LF, 0);
-        else if (!strcmp(ecConf.end_of_line, "crlf"))
+        else if (!strcmp(ec.end_of_line, "crlf"))
             scintilla_send_message(sci, SCI_SETEOLMODE, (uptr_t)SC_EOL_CRLF, 0);
-        else if (!strcmp(ecConf.end_of_line, "cr"))
+        else if (!strcmp(ec.end_of_line, "cr"))
             scintilla_send_message(sci, SCI_SETEOLMODE, (uptr_t)SC_EOL_CR, 0);
     }
 
@@ -203,16 +203,16 @@ on_document_save(GObject* obj, GeanyDocument* gd, gpointer user_data)
         return;
     }
 
-    struct editorconfig     ecConf;
+    struct editorconfig     ec;
     editorconfig_handle     eh = editorconfig_handle_init();
     GeanyEditor*            editor = gd->editor;
 
     if (editorconfig_parse(DOC_FILENAME(gd), eh) != 0) {
         return;
     }
-    parse_editorconfig(eh, &ecConf);
+    parse_editorconfig(eh, &ec);
 
-    if (ecConf.insert_final_newline) {
+    if (ec.insert_final_newline) {
         gint max_lines = sci_get_line_count(editor->sci);
         gboolean append_newline = (max_lines == 1);
         gint end_document = sci_get_position_from_line(
