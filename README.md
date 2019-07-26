@@ -28,8 +28,8 @@ This is an [EditorConfig][] plugin for [Geany][].
         make EDITORCONFIG_PREFIX=/usr
 
     If you've installed geany from source, you'll need to preface the
-    `make` command above with PKG_CONFIG_PATH variable, and set it to
-    the prefix used when you built geany. Example:
+    `make` command above with the PKG_CONFIG_PATH variable, and set it
+    to the prefix used when you built geany. Example:
 
         PKG_CONFIG_PATH=$HOME/.local/lib/pkgconfig make EDITORCONFIG_PREFIX=/usr
 
