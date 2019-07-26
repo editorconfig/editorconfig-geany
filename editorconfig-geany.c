@@ -30,7 +30,6 @@ PLUGIN_SET_INFO("EditorConfig", "EditorConfig Plugin for Geany",
 
 GeanyPlugin*         geany_plugin;
 GeanyData*           geany_data;
-GeanyFunctions*      geany_functions;
 
 /* Reload EditorConfig menu item */
 static GtkWidget*  menu_item_reload_editorconfig;
@@ -142,7 +141,7 @@ load_editorconfig(const GeanyDocument* gd)
     if (ec.indent_size == INDENT_SIZE_TAB) {
         int cur_tabwidth = scintilla_send_message(sci, SCI_GETTABWIDTH, 0, 0);
 
-        /* set indent_size to tab_width here */ 
+        /* set indent_size to tab_width here */
         scintilla_send_message(sci, SCI_SETINDENT, (uptr_t)cur_tabwidth, 0);
     }
 
