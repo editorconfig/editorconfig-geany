@@ -6,13 +6,14 @@ This is an [EditorConfig][] plugin for [Geany][].
 
 ### Install From source
 
-1.  Install the [EditorConfig C Core][]. If you are using Debian/Ubuntu, you can
+1.  Install the [EditorConfig C Core][]. For example, if you are using Debian/Ubuntu, you can
     install it by running the following command:
 
         apt-get install libeditorconfig-dev
 
-    You also need to install geany and GTK development files (GTK2 or GTK3 depending on your system). This could be
-    done by executing the following command if you are using Debian/Ubuntu:
+    You also need to install geany and GTK development files (GTK2 or GTK3 depending on your system).
+    For example, this can be done by executing the following command if you are
+    using Debian/Ubuntu:
 
         apt-get install libgtk2.0-dev libgtk-3-dev intltool geany
 
