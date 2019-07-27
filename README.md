@@ -24,6 +24,13 @@ This is an [EditorConfig][] plugin for [Geany][].
 
         make EDITORCONFIG_PREFIX=/usr
 
+    If you get error messages about missing include files, you'll need
+    to preface the `make` command above with the PKG_CONFIG_PATH
+    variable and set it to the path to `geany.pc`. For example, if it's
+    located in $HOME/.local/lib/pkgconfig:
+
+        PKG_CONFIG_PATH=$HOME/.local/lib/pkgconfig make EDITORCONFIG_PREFIX=/usr
+
 3.  Once the compilation succeeds, there will be an `editorconfig-geany.so` in
     the root of the source tree. Copy this file to `${geany_prefix}/lib/geany`.
     But sometimes the path may be a little bit tricky on some systems. For
