@@ -26,7 +26,7 @@
 PLUGIN_VERSION_CHECK(211)
 
 PLUGIN_SET_INFO("EditorConfig", "EditorConfig Plugin for Geany",
-        "0.2", "http://editorconfig.org");
+        "0.2", "https://editorconfig.org");
 
 GeanyPlugin*         geany_plugin;
 GeanyData*           geany_data;
